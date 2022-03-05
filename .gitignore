@@ -1,2 +1,3 @@
 bastosBackendFlaskVirtualEnv/
 .env.dev
+__pycache__/

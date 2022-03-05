@@ -8,7 +8,7 @@ cli = FlaskGroup(app)
 
 @cli.command("seed_db")
 def seed_db():
-    db.session.add(User(email="michael@mherman.org", first_name="steve"))
+    db.session.add(User(email="michael@mherman.org", last_name="mike"))
     db.session.commit()
 
 

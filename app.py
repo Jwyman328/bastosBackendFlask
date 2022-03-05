@@ -6,8 +6,8 @@ from flask import request, jsonify
 
 @app.get('/')
 def main_fun():
-
-    return User.query.all()[0].email
+    return "hello"
+    # return User.query.all()[0].email
 
 
 @app.route("/auth/login", methods=["GET"])
@@ -32,3 +32,11 @@ def sign_up():
     except:
         print("Exception thrown. x does not exist.")
         return "hello world"
+
+
+if __name__ == "__main__":
+    app.run(
+        debug=True,
+        host='0.0.0.0',
+        port=5000
+    )
