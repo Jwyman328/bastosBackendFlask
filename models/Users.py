@@ -1,19 +1,38 @@
 
 from manage import db
+from sqlalchemy.orm import validates
+from sqlalchemy.schema import CheckConstraint
 
 
 class User(db.Model):
     __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(128), unique=True, nullable=False)
-    last_name = db.Column(db.String, nullable=False)
 
-    # password = db.Column(db.String(128), unique=True, nullable=False)
-    # session_token = db.Column(db.String(128), unique=True, nullable=False)
+    username = db.Column(db.String, nullable=False, unique=True)
+    password_hash = db.Column(db.String, nullable=False, unique=True)
+    session_token = db.Column(db.String, unique=True, nullable=False)
 
-    def __init__(self, email, last_name):
-        self.email = email
-        self.last_name = last_name
-        # self.password = password
-        # self.session_token = session_token
+    def string_length_validation(self, string_value):
+        if len(string_value) < 8:
+            raise ValueError("Value too short")
+        elif len(string_value) > 28:
+            raise ValueError("Value too long")
+
+        return string_value
+
+    @validates("username")
+    def username_validation(self, key, some_string):
+        return self.string_length_validation(some_string)
+
+    __table_args__ = (
+        CheckConstraint('char_length(password_hash) > 8',
+                        name='password_hash'),
+        CheckConstraint('char_length(username) > 8',
+                        name='username')
+    )
+
+    def __init__(self, username, password_hash, session_token):
+        self.username = username
+        self.password_hash = password_hash
+        self.session_token = session_token

@@ -1,4 +1,5 @@
 from flask.cli import FlaskGroup
+from dal.create_new_user import create_new_user
 # all the imports
 from manage import app, db
 from models.Users import User
@@ -8,8 +9,7 @@ cli = FlaskGroup(app)
 
 @cli.command("seed_db")
 def seed_db():
-    db.session.add(User(email="michael@mherman.org", last_name="mike"))
-    db.session.commit()
+    create_new_user(password="password1", username="michael@mherman.org")
 
 
 @cli.command("create_db")
