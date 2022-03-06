@@ -24,19 +24,25 @@ def set_cookie_secure():
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 
-app = Flask(__name__)
-app.config.from_object(__name__)
+def create_app(testing=False):
+    app = Flask(__name__)
+    app.config.from_object(__name__)
 
-# Setup the Flask-JWT-Extended extension
-app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET")  # Change this!
-app.config["JWT_COOKIE_SECURE"] = set_cookie_secure()
-app.config["JWT_TOKEN_LOCATION"] = ["headers"]
-app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)
+    # Setup the Flask-JWT-Extended extension
+    app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET")  # Change this!
+    app.config["JWT_COOKIE_SECURE"] = set_cookie_secure()
+    app.config["JWT_TOKEN_LOCATION"] = ["headers"]
+    app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)
+
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv(
+        "DATABASE_URL", "sqlite://")
+    print('database uri', app.config['SQLALCHEMY_DATABASE_URI'])
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config["TESTING"] = testing
+
+    return app
 
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL", "sqlite://")
-print('database uri', app.config['SQLALCHEMY_DATABASE_URI'])
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
+app = create_app()
 db = SQLAlchemy(app)
 jwt = JWTManager(app)
