@@ -7,3 +7,7 @@ $ bash init.sh
 
 ## add debugging for vscode 
 # simple as runnning bash init.sh and then vscode code run debug
+
+## testing 
+# bash script to set up test database, wait for it to be available, and then run all tests
+$ bash test.sh

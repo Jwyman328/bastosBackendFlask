@@ -2,15 +2,19 @@
 
 from datetime import datetime, timedelta
 from dal.User_dal import UserDal
-from manage import app, db, jwt
+from manage import create_app, jwt
 from models.Users import User
 from flask import request, jsonify, abort, Response
 from flask_jwt_extended import create_access_token, get_jwt
 from flask_jwt_extended import get_jwt_identity, get_jti
 from flask_jwt_extended import jwt_required
 from werkzeug.security import check_password_hash
-from controllers.auth import auth_controller
-from controllers.root import root_blueprint
+from flask_jwt_extended import JWTManager
+
+
+app = create_app('flask.cfg')
+jwt = JWTManager(app)
+
 
 # Register a callback function that takes whatever object is passed in as the
 # identity when creating JWTs and converts it to a JSON serializable format.
@@ -55,9 +59,6 @@ def user_lookup_callback(_jwt_header, jwt_data):
 def protected():
     return jsonify(foo="bar")
 
-
-app.register_blueprint(auth_controller)
-app.register_blueprint(root_blueprint)
 
 
 if __name__ == "__main__":

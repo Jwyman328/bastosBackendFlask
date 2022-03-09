@@ -7,9 +7,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
 
 
-# app = Flask(__name__)  # create the application instance :)
-# app.config.from_object(__name__)  # load config from this file , flaskr.py
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+db = SQLAlchemy()
 
 # If true this will only allow the cookies that contain your JWTs to be sent
 # over https. In production, this should always be set to True
@@ -24,9 +22,9 @@ def set_cookie_secure():
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 
-def create_app(testing=False):
+def create_app(config_filename=None):
     app = Flask(__name__)
-    app.config.from_object(__name__)
+    app.config.from_pyfile(config_filename)
 
     # Setup the Flask-JWT-Extended extension
     app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET")  # Change this!
@@ -34,15 +32,15 @@ def create_app(testing=False):
     app.config["JWT_TOKEN_LOCATION"] = ["headers"]
     app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)
 
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv(
-        "DATABASE_URL", "sqlite://")
-    print('database uri', app.config['SQLALCHEMY_DATABASE_URI'])
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.config["TESTING"] = testing
+    db.init_app(app)
+    init_blueprints(app)
 
     return app
 
 
-app = create_app()
-db = SQLAlchemy(app)
-jwt = JWTManager(app)
+def init_blueprints(app):
+    from controllers.auth import auth_controller
+    from controllers.root import root_blueprint
+    app.register_blueprint(auth_controller)
+
+    app.register_blueprint(root_blueprint)

@@ -1,6 +1,6 @@
 
 from models.Users import User
-from manage import app, db, jwt
+from manage import db
 from flask_jwt_extended import create_access_token, get_jti
 from flask import jsonify
 from werkzeug.security import generate_password_hash

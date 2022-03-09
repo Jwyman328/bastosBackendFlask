@@ -1,8 +1,9 @@
 from flask.cli import FlaskGroup
 from dal.User_dal import UserDal
 # all the imports
-from manage import app, db
+from manage import db
 from models.Users import User
+from app import app
 
 cli = FlaskGroup(app)
 
