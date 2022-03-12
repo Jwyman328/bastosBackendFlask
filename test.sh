@@ -7,14 +7,14 @@ docker-compose up -d test_db
 # https://www.postgresql.org/docs/current/app-pg-isready.html
 echo "[db] not yet ready to accept connections"
 WAIT_FOR_PG_ISREADY="while ! pg_isready; do sleep 1; done;"
-docker-compose exec postgres bash -c "$WAIT_FOR_PG_ISREADY"
+docker-compose exec test_db bash -c "$WAIT_FOR_PG_ISREADY"
 echo "[db] ready to accept connections"
 
 # docker-compose exec postgres psql node_crud productioncoder -c "create user $USER"
 
 # run all tests with Mocha
 echo "running all tests..."
-python -m pytest -v -s  
+python -m pytest -v -s 
 
 # tear down db and any other containers that might be running
 echo "tearing down all containers..."

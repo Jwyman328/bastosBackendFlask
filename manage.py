@@ -7,6 +7,9 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
 
 
+from datetime import datetime, timedelta
+from flask_jwt_extended import JWTManager
+
 db = SQLAlchemy()
 
 # If true this will only allow the cookies that contain your JWTs to be sent
@@ -33,6 +36,7 @@ def create_app(config_filename=None):
     app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)
 
     db.init_app(app)
+    init_auth_jwt(app)
     init_blueprints(app)
 
     return app
@@ -44,3 +48,30 @@ def init_blueprints(app):
     app.register_blueprint(auth_controller)
 
     app.register_blueprint(root_blueprint)
+
+
+def init_auth_jwt(app):
+    from models.Users import User
+
+    jwt = JWTManager(app)
+
+    # Register a callback function that takes whatever object is passed in as the
+    # identity when creating JWTs and converts it to a JSON serializable format.
+    # don't really think this does much as of right now
+
+    @jwt.user_identity_loader
+    def user_identity_lookup(user):
+        return user
+
+    # Register a callback function that loads a user from your database whenever
+    # a protected route is accessed. This should return any python object on a
+    # successful lookup, or None if the lookup failed for any reason (for example
+    # if the user has been deleted from the database).
+
+    @jwt.user_lookup_loader
+    def user_lookup_callback(_jwt_header, jwt_data):
+        try:
+            user_identifying_data_stored_in_jwt = jwt_data["jti"]
+            return User.query.filter_by(session_id=user_identifying_data_stored_in_jwt).one_or_none()
+        except Exception as error:
+            raise Exception("invalid user")

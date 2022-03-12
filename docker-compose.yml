@@ -34,7 +34,7 @@ services:
 
   test_db:
     image: postgres:12
-    container_name: postgres
+    container_name: test_db
     environment:
       # allow anyone to connect - even without a password
       # only use for running locally or in CI/CD

@@ -10,10 +10,18 @@ from flask_jwt_extended import jwt_required
 auth_controller = Blueprint("auth", __name__)
 
 
-@auth_controller.route("/auth/login", methods=["GET"])
+@auth_controller.route("/protected")
+@jwt_required()
+def protected():
+    return jsonify(foo="bar")
+
+
+
+
+@auth_controller.route("/auth/login", methods=["POST"])
 def login():
-    username = request.data['username']
-    password = request.data['password']
+    username = request.json['username']
+    password = request.json['password']
     session_token = UserDal.login_user(username, password)
 
     return jsonify(access_token=session_token)

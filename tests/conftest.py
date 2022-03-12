@@ -1,9 +1,13 @@
 import pytest
 import os
 
+from sqlalchemy import delete
+
 from manage import create_app
 
 from manage import db
+from models.Users import User
+from fixtures.user_fixtures import valid_user_data
 
 
 @pytest.fixture(scope="function")
@@ -46,5 +50,28 @@ def init_db(test_client, request):
     request.addfinalizer(teardown)
     db.session.commit()
 
-    # return db
+    return db
 
+
+@pytest.fixture(scope="function")
+def populate_db_with_valid_user(test_client, init_db, request):
+    db = init_db
+    valid_user = User(
+        username=valid_user_data["username"], password=valid_user_data["password"])
+
+    db.session.add(valid_user)
+    db.session.commit()
+
+    def teardown():
+        User.query.filter(User.id == valid_user.id).delete()
+        db.session.commit()
+
+    request.addfinalizer(teardown)
+
+    return valid_user
+
+
+@pytest.fixture(scope="function")
+def drop_all_users(test_client, init_db):
+    User.query.delete()
+    init_db.session.commit()

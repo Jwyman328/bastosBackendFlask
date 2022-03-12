@@ -3,6 +3,8 @@ from manage import db
 from sqlalchemy.orm import validates
 from sqlalchemy.schema import CheckConstraint
 from werkzeug.security import check_password_hash
+from flask_jwt_extended import create_access_token, get_jti
+from werkzeug.security import generate_password_hash
 
 
 class User(db.Model):
@@ -34,11 +36,15 @@ class User(db.Model):
                         name='username')
     )
 
-    def __init__(self, username, password_hash, session_token, session_id):
+    def __init__(self, username, password):
+        access_token = create_access_token(identity=username)
+        jti = get_jti(access_token)
+        hashed_password = generate_password_hash(password)
+
         self.username = username
-        self.password_hash = password_hash
-        self.session_token = session_token
-        self.session_id = session_id
+        self.password_hash = hashed_password
+        self.session_token = access_token
+        self.session_id = jti
 
     def verify_password(self, pwd):
         return check_password_hash(self.password_hash, pwd)

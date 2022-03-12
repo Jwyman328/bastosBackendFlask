@@ -10,22 +10,23 @@ class UserDal():
 
     @staticmethod
     def create_new_user(username, password):
-        access_token = create_access_token(identity=username)
-        jti = get_jti(access_token)
-        hashed_password = generate_password_hash(password)
-        new_user = User(username=username, password_hash=hashed_password,
-                        session_token=access_token, session_id=jti)
+        new_user = User(username=username, password=password)
         db.session.add(new_user)
         db.session.commit()
 
-        return access_token
+        return new_user.session_token
 
     @staticmethod
     def login_user(username, password):
-        # find user by username
         user = User.query.filter_by(username=username).first()
+        print("did we get user", user)
         if (user and user.verify_password(password)):
             new_access_token = create_access_token(identity=username)
+            jti = get_jti(new_access_token)
+            # save new token in db
+            setattr(user, "session_token", new_access_token)
+            setattr(user, "session_id", jti)
+
             return new_access_token
         else:
             raise Exception("User login error")
