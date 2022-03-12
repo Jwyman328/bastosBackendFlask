@@ -4,7 +4,7 @@
 pip freeze > requirements.txt
 
 ## -d will not keep docker up and running in the terminal but keep it running as a background process
-docker-compose up -d --build
+docker-compose up -d --build db && docker-compose up -d --build web
 
 ##allow postgres to setup
 sleep 30
