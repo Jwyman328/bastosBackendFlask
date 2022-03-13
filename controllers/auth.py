@@ -16,8 +16,6 @@ def protected():
     return jsonify(foo="bar")
 
 
-
-
 @auth_controller.route("/auth/login", methods=["POST"])
 def login():
     username = request.json['username']

@@ -4,7 +4,6 @@ from dal.User_dal import UserDal
 from manage import db
 from models.Articles import Article
 from models.Categories import Category
-from models.Users import User
 from app import app
 
 cli = FlaskGroup(app)

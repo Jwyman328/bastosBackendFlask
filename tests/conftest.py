@@ -105,6 +105,7 @@ def populate_db_with_articles_and_categories(test_client, init_db, request):
             db.session.commit()
 
     request.addfinalizer(teardown)
+    return {"categories": [horror, economics, history], "articles": [article_1, article_2]}
 
 
 @pytest.fixture(scope="function")

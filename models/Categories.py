@@ -1,7 +1,8 @@
 from manage import db
+from models.Base import Base
 
 
-class Category(db.Model):
+class Category(db.Model, Base):
     # __tablename__ = "categories"
     id = db.Column(db.Integer, primary_key=True)
 

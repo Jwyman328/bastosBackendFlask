@@ -1,19 +1,16 @@
-from datetime import timedelta
-from flask.cli import FlaskGroup
 # all the imports
 import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
-
-
-from datetime import datetime, timedelta
-from flask_jwt_extended import JWTManager
+from datetime import timedelta
 
 db = SQLAlchemy()
 
 # If true this will only allow the cookies that contain your JWTs to be sent
 # over https. In production, this should always be set to True
+
+
 def set_cookie_secure():
     env = os.getenv("FLASK_ENV")
     if (env == 'development'):
@@ -45,8 +42,10 @@ def create_app(config_filename=None):
 def init_blueprints(app):
     from controllers.auth import auth_controller
     from controllers.root import root_blueprint
-    app.register_blueprint(auth_controller)
+    from controllers.articles import article_controller
 
+    app.register_blueprint(auth_controller)
+    app.register_blueprint(article_controller)
     app.register_blueprint(root_blueprint)
 
 

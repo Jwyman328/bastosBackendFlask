@@ -2,8 +2,6 @@
 from models.Users import User
 from manage import db
 from flask_jwt_extended import create_access_token, get_jti
-from flask import jsonify
-from werkzeug.security import generate_password_hash
 
 
 class UserDal():
@@ -34,7 +32,7 @@ class UserDal():
     @staticmethod
     def logout_user(jti):
         try:
-            user = User.query.filter_by(session_id=jti).update({
+            User.query.filter_by(session_id=jti).update({
                 "session_token": None, "session_id": None})
             db.session.commit()
             return "success"

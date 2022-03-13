@@ -1,4 +1,5 @@
 
+import json
 from models.Articles import Article
 from models.Categories import Category
 from fixtures.article_fixtures import article_1_fixture, article_2_fixture
@@ -19,3 +20,15 @@ def test_articles(test_client, init_db, populate_db_with_articles_and_categories
     assert len(article_2.categories) == 3
     assert len(history_category.article) == 1
     assert len(economics_category.article) == 2
+
+
+def test_get_articles_and_related_categories_as_jsonable():
+    first_article = Article(**article_1_fixture)
+    first_category = Category(category=category_economics_fixture)
+    first_article.categories.append(first_category)
+
+    first_article_all_json = first_article.get_articles_and_related_categories_as_jsonable()
+    article_1_fixture["categories"] = [
+        {"category": category_economics_fixture}]
+
+    assert first_article_all_json == article_1_fixture
