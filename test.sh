@@ -15,7 +15,6 @@ echo "[db] ready to accept connections"
 # run all tests with Mocha
 echo "running all tests..."
 python -m pytest -v -s 
-
 # tear down db and any other containers that might be running
 echo "tearing down all containers..."
 docker-compose down -v --remove-orphans

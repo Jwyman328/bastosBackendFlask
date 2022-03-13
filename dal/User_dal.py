@@ -19,7 +19,7 @@ class UserDal():
     @staticmethod
     def login_user(username, password):
         user = User.query.filter_by(username=username).first()
-        print("did we get user", user)
+
         if (user and user.verify_password(password)):
             new_access_token = create_access_token(identity=username)
             jti = get_jti(new_access_token)

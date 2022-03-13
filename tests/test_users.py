@@ -3,7 +3,6 @@ from models.Users import User
 
 
 def test_user_model(test_client):
-    session_id = "this is seshid"
     username = "MyNameIsTheUSer"
     password = "randomHashfsdaffds"
 
@@ -22,7 +21,7 @@ def test_username_string_min_len_validation():
     password = "randomHashfsdaffds"
 
     with pytest.raises(Exception, match="Value too short") as e:
-        new_user = User(username=username, password=password)
+        User(username=username, password=password)
     assert str(e.value) == "Value too short"
 
 
@@ -31,5 +30,5 @@ def test_username_string_max_len_validation():
     password = "randomHashfsdaffds"
 
     with pytest.raises(Exception) as e:
-        new_user = User(username=username, password=password)
+        User(username=username, password=password)
     assert str(e.value) == "Value too long"
