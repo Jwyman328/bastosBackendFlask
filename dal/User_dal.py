@@ -38,3 +38,6 @@ class UserDal():
             return "success"
         except:
             raise Exception("User logout error")
+
+    def get_user_by_jti(jti):
+        return  User.query.filter_by(session_id=jti).first()

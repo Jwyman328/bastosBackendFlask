@@ -5,6 +5,7 @@ from sqlalchemy.schema import CheckConstraint
 from werkzeug.security import check_password_hash
 from flask_jwt_extended import create_access_token, get_jti
 from werkzeug.security import generate_password_hash
+from models.relationships.user_read_book import user_read_books
 
 
 class User(db.Model):
@@ -16,6 +17,8 @@ class User(db.Model):
     password_hash = db.Column(db.String, nullable=False, unique=True)
     session_token = db.Column(db.String, unique=True, nullable=True)
     session_id = db.Column(db.String, unique=True, nullable=True)
+    read_books = db.relationship(
+        "Book", secondary=user_read_books, backref="read_by_users", lazy=False)
 
     def string_length_validation(self, string_value):
         if len(string_value) < 8:

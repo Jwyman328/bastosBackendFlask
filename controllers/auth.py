@@ -1,8 +1,6 @@
 from flask import Blueprint
-from datetime import datetime, timedelta
 from dal.User_dal import UserDal
-from models.Users import User
-from flask import request, jsonify, abort, Response
+from flask import request, jsonify, Response
 from flask_jwt_extended import get_jwt
 from flask_jwt_extended import jwt_required
 

@@ -7,9 +7,11 @@ from manage import db
 from models.Articles import Article
 from models.Categories import Category
 from models.Users import User
+from models.Books import Book
 from fixtures.user_fixtures import valid_user_data
 from fixtures.article_fixtures import article_1_fixture, article_2_fixture
 from fixtures.category_fixtures import category_economics_fixture, category_history_fixture, category_horror_fixture
+from fixtures.book_fixtures import creadores_de_riqueza, fundamentos_de_la_libertad
 
 
 @pytest.fixture(scope="function")
@@ -52,6 +54,7 @@ def init_db(test_client, request):
 
     request.addfinalizer(teardown)
     db.session.commit()
+    db.session().expire_on_commit = False
 
     return db
 
@@ -106,6 +109,52 @@ def populate_db_with_articles_and_categories(test_client, init_db, request):
 
     request.addfinalizer(teardown)
     return {"categories": [horror, economics, history], "articles": [article_1, article_2]}
+
+
+@pytest.fixture(scope="function")
+def populate_db_with_books_and_categories(test_client, init_db, request):
+    db = init_db
+
+    horror = Category(category=category_horror_fixture)
+    economics = Category(category=category_economics_fixture)
+    history = Category(category=category_history_fixture)
+
+    book_1 = Book(**creadores_de_riqueza)
+    book_2 = Book(**fundamentos_de_la_libertad)
+    db.session.add_all([book_1, book_2, horror, history,  economics])
+    db.session.commit()
+    book_1.catagories.extend([horror, economics])
+    book_2.catagories.extend([horror, economics, history])
+    db.session.commit()
+
+    def teardown():
+        all_books = Book.query.all()
+        all_categories = Category.query.all()
+        for book_item in all_books:
+            db.session.delete(book_item)
+            db.session.commit()
+
+        for category_item in all_categories:
+            db.session.delete(category_item)
+            db.session.commit()
+
+    request.addfinalizer(teardown)
+    return {"categories": [horror, economics, history], "books": [book_1, book_2]}
+
+@pytest.fixture(scope="function")
+def valid_user_has_read_first_book(init_db, populate_db_with_valid_user, populate_db_with_books_and_categories, request):
+    db = init_db
+
+    all_books = populate_db_with_books_and_categories["books"]
+    valid_user = populate_db_with_valid_user
+    valid_user.read_books.append(all_books[0])
+    db.session.commit()
+
+    return valid_user
+
+    
+
+
 
 
 @pytest.fixture(scope="function")
