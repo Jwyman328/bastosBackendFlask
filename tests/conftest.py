@@ -150,7 +150,19 @@ def valid_user_has_read_first_book(init_db, populate_db_with_valid_user, populat
     valid_user.read_books.append(all_books[0])
     db.session.commit()
 
-    return valid_user
+    return {"user":valid_user, "book": all_books[0]}
+
+@pytest.fixture(scope="function")
+def valid_user_has_read_two_books(init_db, populate_db_with_valid_user, populate_db_with_books_and_categories, request):
+    db = init_db
+
+    all_books = populate_db_with_books_and_categories["books"]
+    valid_user = populate_db_with_valid_user
+    valid_user.read_books.append(all_books[0])
+    valid_user.read_books.append(all_books[1])
+    db.session.commit()
+
+    return {"user":valid_user, "books": all_books}
 
     
 

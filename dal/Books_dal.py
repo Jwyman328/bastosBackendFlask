@@ -1,7 +1,7 @@
 
 from models.Books import Book
-
-
+from models.Users import User 
+from manage import db
 class BookDal():
 
     @staticmethod
@@ -17,3 +17,22 @@ class BookDal():
 
             json_books.append(book_as_json)
         return json_books
+
+    @staticmethod
+    def mark_book_as_read(user_id, book_id):
+        book_to_be_marked_as_read = Book.query.filter_by(id=book_id).first()
+        user = User.query.filter_by(id=user_id).first()
+        user.read_books.append(book_to_be_marked_as_read)
+        db.session.commit()
+
+    @staticmethod
+    def mark_book_as_unread(user_id, book_id):
+        user = User.query.filter_by(id=user_id).first()
+
+        new_read_books = list(filter(lambda book: book.id != int(book_id), user.read_books))
+
+        user.read_books = new_read_books
+        db.session.commit()
+
+
+        
