@@ -8,11 +8,12 @@ from models.Articles import Article
 from models.Categories import Category
 from models.Users import User
 from models.Books import Book
+from models.Videos import Video
 from fixtures.user_fixtures import valid_user_data
 from fixtures.article_fixtures import article_1_fixture, article_2_fixture
 from fixtures.category_fixtures import category_economics_fixture, category_history_fixture, category_horror_fixture
 from fixtures.book_fixtures import creadores_de_riqueza, fundamentos_de_la_libertad
-
+from fixtures.video_fixtures import video_fixture, video_fixture_2
 
 @pytest.fixture(scope="function")
 def log_test_start():
@@ -164,9 +165,48 @@ def valid_user_has_read_two_books(init_db, populate_db_with_valid_user, populate
 
     return {"user":valid_user, "books": all_books}
 
+@pytest.fixture(scope="function")
+def populate_db_with_videos_and_categories(test_client, init_db, request):
+    db = init_db
+
+    horror = Category(category=category_horror_fixture)
+    economics = Category(category=category_economics_fixture)
+    history = Category(category=category_history_fixture)
+
     
+    video_1 = Video(title=video_fixture["title"], image=video_fixture["image"], noteCount=video_fixture["noteCount"], year=video_fixture["year"], videoUrl=video_fixture["videoUrl"])
+    video_2 = Video(title=video_fixture_2["title"], image=video_fixture_2["image"], noteCount=video_fixture_2["noteCount"], year=video_fixture_2["year"], videoUrl=video_fixture_2["videoUrl"])
+
+    db.session.add_all([video_1, horror, history,  economics, video_2])
+    db.session.commit()
+    video_1.categories.extend([horror, economics])
+    video_2.categories.extend([history])
+    db.session.commit()
+
+    def teardown():
+        all_videos = Video.query.all()
+        all_categories = Category.query.all()
+        for book_item in all_videos:
+            db.session.delete(book_item)
+            db.session.commit()
+
+        for category_item in all_categories:
+            db.session.delete(category_item)
+            db.session.commit()
+
+    request.addfinalizer(teardown)
+    return {"categories": [horror, economics, history], "videos": [video_1, video_2]}
 
 
+@pytest.fixture(scope="function")
+def valid_user_has_watched_first_video(init_db, populate_db_with_valid_user, populate_db_with_videos_and_categories, request):
+    db = init_db
+
+    all_videos = populate_db_with_videos_and_categories["videos"]
+    valid_user = populate_db_with_valid_user
+    valid_user.watched_videos.append(all_videos[0])
+    db.session.commit()
+    return {"user":valid_user, "watched_video": all_videos[0], "all_videos":all_videos}
 
 
 @pytest.fixture(scope="function")

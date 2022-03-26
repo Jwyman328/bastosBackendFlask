@@ -6,7 +6,7 @@ from werkzeug.security import check_password_hash
 from flask_jwt_extended import create_access_token, get_jti
 from werkzeug.security import generate_password_hash
 from models.relationships.user_read_book import user_read_books
-
+from models.relationships.user_watched_videos import user_watched_videos
 
 class User(db.Model):
     __tablename__ = "users"
@@ -19,6 +19,8 @@ class User(db.Model):
     session_id = db.Column(db.String, unique=True, nullable=True)
     read_books = db.relationship(
         "Book", secondary=user_read_books, backref="read_by_users", lazy=False)
+    watched_videos =  db.relationship(
+        "Video", secondary=user_watched_videos, backref="users_that_have_watched_this_video", lazy=False)
 
     def string_length_validation(self, string_value):
         if len(string_value) < 8:
