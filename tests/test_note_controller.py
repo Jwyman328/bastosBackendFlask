@@ -18,9 +18,9 @@ def test_get_notes_for_video(test_client,populate_db_with_valid_user,  populate_
     assert len(response_data_as_python_dict) == 1
 
     assert video_id == response_data_as_python_dict[0]["video_id"]
-    assert note["videoTimeNoteTakenInSeconds"] == response_data_as_python_dict[0]["videoTimeNoteTakenInSeconds"]
-    assert note["noteTitle"] == response_data_as_python_dict[0]["noteTitle"]
-    assert note["noteText"] == response_data_as_python_dict[0]["noteText"]
+    assert note["videoTimeNoteTakenInSeconds"] == response_data_as_python_dict[0]["video_time_note_taken_in_seconds"]
+    assert note["noteTitle"] == response_data_as_python_dict[0]["note_title"]
+    assert note["noteText"] == response_data_as_python_dict[0]["note_text"]
 
 def test_note_creation_through_post(test_client,populate_db_with_valid_user,  populate_db_with_videos_and_notes,):
     valid_user_session_token = populate_db_with_valid_user.session_token
@@ -40,7 +40,7 @@ def test_note_creation_through_post(test_client,populate_db_with_valid_user,  po
     # convert json data to python
     response_data_as_python_dict = json.loads(response.get_data(as_text=True))
     assert len(response_data_as_python_dict) == 1
-    assert response_data_as_python_dict[0]["noteTitle"] == note_data["noteTitle"]
+    assert response_data_as_python_dict[0]["note_title"] == note_data["noteTitle"]
     
 
 def test_note_delete( test_client, populate_db_with_valid_user,  populate_db_with_videos_and_notes):
@@ -83,6 +83,6 @@ def test_note_update(test_client, populate_db_with_valid_user,  populate_db_with
     response_data_as_python_dict = json.loads(response.get_data(as_text=True))
     assert len(response_data_as_python_dict) == 1
 
-    assert updated_note_data["noteTitle"] == response_data_as_python_dict[0]["noteTitle"]
-    assert updated_note_data["noteText"] == response_data_as_python_dict[0]["noteText"]
+    assert updated_note_data["noteTitle"] == response_data_as_python_dict[0]["note_title"]
+    assert updated_note_data["noteText"] == response_data_as_python_dict[0]["note_text"]
 

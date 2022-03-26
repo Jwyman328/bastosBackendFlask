@@ -204,7 +204,7 @@ def populate_db_with_videos_and_notes(init_db, populate_db_with_videos_and_categ
     db = init_db
     videos = populate_db_with_videos_and_categories["videos"]
 
-    new_note_for_video_1 = Note(**note_fixture_one)
+    new_note_for_video_1 = Note(note_text=note_fixture_one["noteText"], note_title=note_fixture_one["noteTitle"], video_time_note_taken_in_seconds=note_fixture_one["videoTimeNoteTakenInSeconds"])
     videos[0].notes.append(new_note_for_video_1)
     db.session.commit()
 
