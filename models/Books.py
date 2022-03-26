@@ -12,13 +12,13 @@ class Book(db.Model, Base):
     locationLink = db.Column(db.String)
     year = db.Column(db.Integer)
 
-    def __init(self, title, catagories, author, locationLink,
-               year):
+    def __init__(self, title, author, locationLink,
+               year, image):
         self.title = title
-        self.catagories = catagories
         self.author = author
         self.locationLink = locationLink
         self.year = year
+        self.image = image
 
     def get_json_categories_without_book_backref(self):
         json_categories = []
