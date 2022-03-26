@@ -45,12 +45,14 @@ def init_blueprints(app):
     from controllers.articles import article_controller
     from controllers.books import books_controller
     from controllers.videos import videos_controller
+    from controllers.notes import notes_controller
 
     app.register_blueprint(auth_controller)
     app.register_blueprint(article_controller)
     app.register_blueprint(root_blueprint)
     app.register_blueprint(books_controller)
     app.register_blueprint(videos_controller)
+    app.register_blueprint(notes_controller)
 
 
 def init_auth_jwt(app):

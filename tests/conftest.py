@@ -9,11 +9,13 @@ from models.Categories import Category
 from models.Users import User
 from models.Books import Book
 from models.Videos import Video
+from models.Notes import Note
 from fixtures.user_fixtures import valid_user_data
 from fixtures.article_fixtures import article_1_fixture, article_2_fixture
 from fixtures.category_fixtures import category_economics_fixture, category_history_fixture, category_horror_fixture
 from fixtures.book_fixtures import creadores_de_riqueza, fundamentos_de_la_libertad
 from fixtures.video_fixtures import video_fixture, video_fixture_2
+from fixtures.note_fixtures import note_fixture_one
 
 @pytest.fixture(scope="function")
 def log_test_start():
@@ -196,6 +198,25 @@ def populate_db_with_videos_and_categories(test_client, init_db, request):
 
     request.addfinalizer(teardown)
     return {"categories": [horror, economics, history], "videos": [video_1, video_2]}
+
+@pytest.fixture(scope="function")
+def populate_db_with_videos_and_notes(init_db, populate_db_with_videos_and_categories, request):
+    db = init_db
+    videos = populate_db_with_videos_and_categories["videos"]
+
+    new_note_for_video_1 = Note(**note_fixture_one)
+    videos[0].notes.append(new_note_for_video_1)
+    db.session.commit()
+
+    def teardown():
+        all_notes = Note.query.all()
+        for note_item in all_notes:
+            db.session.delete(note_item)
+            db.session.commit()
+
+
+    request.addfinalizer(teardown)
+    return {"video_with_notes": videos[0], "video_without_notes": videos[1], "note_data": note_fixture_one, "video_id":videos[0].id, "note_id": new_note_for_video_1.id  }
 
 
 @pytest.fixture(scope="function")

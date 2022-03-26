@@ -14,7 +14,8 @@ class Video(db.Model, Base):
 
     categories = db.relationship(
         "Category", secondary=video_category, backref="videos", lazy=False)
-    
+    notes = db.relationship('Note', backref='video', lazy=True, cascade="all, delete")
+
 
     def __init__(self, title, image, videoUrl, noteCount, year):
         self.title = title 
