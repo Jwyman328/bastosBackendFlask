@@ -30,7 +30,7 @@ def test_signup(test_client, init_db):
                                 headers={"Content-Type": "application/json"},)
 
     data = json.loads(response.get_data(as_text=True))
-    assert data["access_token"] == User.query.first().session_token
+    assert data["token"] == User.query.first().session_token
 
 
 def test_logout(test_client, drop_all_users, populate_db_with_valid_user):
@@ -38,7 +38,7 @@ def test_logout(test_client, drop_all_users, populate_db_with_valid_user):
 
     user_token = populate_db_with_valid_user.session_token
     response = test_client.post(
-        '/logout', headers={"Content-Type": "application/json", "Authorization": f"Bearer {user_token}"},)
+        '/logout', headers={"Content-Type": "application/json", "Authorization": f"JWT {user_token}"},)
     data = json.loads(response.get_data(as_text=True))
     assert data["msg"] == 'logout successful'
 

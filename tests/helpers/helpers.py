@@ -12,4 +12,4 @@ def create_json_articles_array_from_initial_articles(initial_articles_and_catego
 
 
 def create_authentication_header(user_token):
-    return {"Content-Type": "application/json", "Authorization": f"Bearer {user_token}"}
+    return {"Content-Type": "application/json", "Authorization": f"JWT {user_token}"}

@@ -31,7 +31,7 @@ def sign_up():
         session_token = UserDal.create_new_user(
             username=username, password=password)
 
-        return jsonify(access_token=session_token)
+        return jsonify(token=session_token)
     except Exception as exception:
         error_response = Response(status=404)
         error_response.set_data("invalid signup")

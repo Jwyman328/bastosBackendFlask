@@ -4,8 +4,9 @@ from dal.User_dal import UserDal
 from manage import db
 from models.Articles import Article
 from models.Categories import Category
+from models.Books import Book
 from app import app
-
+from fixtures.book_fixtures import fundamentos_de_la_libertad
 cli = FlaskGroup(app)
 
 
@@ -23,7 +24,10 @@ def seed_db():
 
     article_2 = Article(url="www.myurl.com", imageUrl="www.myimageurl.com",
                         title="the best article", )
-    db.session.add_all([article_2, article_1, horror, history,  economics])
+
+    fundamentos_de_la_libertad_instance = Book(**fundamentos_de_la_libertad)
+    fundamentos_de_la_libertad_instance.catagories.append(economics)
+    db.session.add_all([article_2, article_1, horror, history,  economics, fundamentos_de_la_libertad_instance])
     db.session.commit()
     article_1.categories.append(horror)
     db.session.commit()

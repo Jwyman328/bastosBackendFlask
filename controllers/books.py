@@ -8,8 +8,8 @@ from controllers.helpers.auth_helpers import get_current_user_by_jwt
 
 books_controller = Blueprint("books", __name__)
 
-
-@books_controller.route("/books")
+# the exta / is bad practice but currently what is done in the frontend
+@books_controller.route("/books/")
 @jwt_required()
 def get_all_books():
     current_user = get_current_user_by_jwt()
@@ -17,7 +17,7 @@ def get_all_books():
     all_books = BookDal.get_all_books_from_db(user_id)
     return jsonify(all_books)
 
-@books_controller.route("/books/read", methods=["POST"])
+@books_controller.route("/books/read/", methods=["POST"])
 @jwt_required()
 def mark_book_as_read():
     current_user = get_current_user_by_jwt()
@@ -26,9 +26,10 @@ def mark_book_as_read():
 
     BookDal.mark_book_as_read(user_id, book_id)
 
-    return Response( status=201, mimetype='application/json')
+    return Response(status=201, mimetype='application/json')
 
-@books_controller.route("/books/read", methods=["DELETE"])
+
+@books_controller.route("/books/read/", methods=["DELETE"])
 @jwt_required()
 def remove_book_as_read():
     current_user = get_current_user_by_jwt()

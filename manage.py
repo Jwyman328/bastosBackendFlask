@@ -32,6 +32,7 @@ def create_app(config_filename=None):
     app.config["JWT_COOKIE_SECURE"] = set_cookie_secure()
     app.config["JWT_TOKEN_LOCATION"] = ["headers"]
     app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)
+    app.config["JWT_HEADER_TYPE"] = "JWT"
 
     db.init_app(app)
     init_auth_jwt(app)
