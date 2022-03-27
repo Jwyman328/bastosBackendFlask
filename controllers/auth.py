@@ -20,7 +20,7 @@ def login():
     password = request.json['password']
     session_token = UserDal.login_user(username, password)
 
-    return jsonify(access_token=session_token)
+    return jsonify(token=session_token)
 
 
 @auth_controller.route("/auth/sign_up", methods=["POST"])

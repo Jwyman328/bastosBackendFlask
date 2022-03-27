@@ -5,7 +5,7 @@ class ArticleDal():
 
     @staticmethod
     def get_all_articles():
-        all_articles = Article.query.join(Article.categories).all()
+        all_articles = Article.query.all()
         json_articles = []
         for article_item in all_articles:
             json_articles.append(

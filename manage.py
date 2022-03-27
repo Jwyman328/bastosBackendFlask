@@ -4,6 +4,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
 from datetime import timedelta
+from flask_cors import CORS
 
 db = SQLAlchemy()
 
@@ -35,6 +36,8 @@ def create_app(config_filename=None):
     db.init_app(app)
     init_auth_jwt(app)
     init_blueprints(app)
+
+    CORS(app, resources={r"*": {"origins": "*"}})
 
     return app
 

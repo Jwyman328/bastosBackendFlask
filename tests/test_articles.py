@@ -28,7 +28,6 @@ def test_get_articles_and_related_categories_as_jsonable():
     first_article.categories.append(first_category)
 
     first_article_all_json = first_article.get_articles_and_related_categories_as_jsonable()
-    article_1_fixture["categories"] = [
-        {"category": category_economics_fixture}]
+    article_1_fixture["categories"] = [category_economics_fixture]
 
     assert first_article_all_json == article_1_fixture

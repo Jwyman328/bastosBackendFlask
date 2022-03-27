@@ -15,7 +15,7 @@ def test_login(test_client, populate_db_with_valid_user):
 
     data = json.loads(response.get_data(as_text=True))
 
-    assert data["access_token"] == populate_db_with_valid_user.session_token
+    assert data["token"] == populate_db_with_valid_user.session_token
 
 
 # returns success, adds user to database, and returns access_token

@@ -2,6 +2,10 @@ from manage import db
 from models.Base import Base
 from models.relationships.book_category import book_category
 
+# I guess Category has to be imported because it is references in the categories relationship.
+# https://stackoverflow.com/questions/61782453/flask-sqlalchemy-relationship-errors
+from models.Categories import Category
+
 class Book(db.Model, Base):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String)

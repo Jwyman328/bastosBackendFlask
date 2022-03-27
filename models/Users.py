@@ -19,7 +19,7 @@ class User(db.Model):
     session_id = db.Column(db.String, unique=True, nullable=True)
     read_books = db.relationship(
         "Book", secondary=user_read_books, backref="read_by_users", lazy=False)
-    watched_videos =  db.relationship(
+    watched_videos = db.relationship(
         "Video", secondary=user_watched_videos, backref="users_that_have_watched_this_video", lazy=False)
 
     def string_length_validation(self, string_value):
