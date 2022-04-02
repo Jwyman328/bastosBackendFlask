@@ -22,7 +22,7 @@ class VideoDal():
     def mark_video_as_watched(user_id, video_id):
         user = User.query.filter_by(id=user_id).first()
 
-        watched_video = Video.query.filter_by(id=video_id).first()
+        watched_video = Video.query.filter_by(videoUrl=video_id).first()
         user.watched_videos.append(watched_video)
         db.session.commit()
         return watched_video

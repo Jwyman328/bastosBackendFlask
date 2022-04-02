@@ -47,7 +47,7 @@ def test_mark_video_as_watched(test_client, valid_user_has_watched_first_video):
     assert unwatched_video.has_been_watched_by_user(valid_user.id) == False
 
     valid_user_request_headers = create_authentication_header(valid_user.session_token)
-    video_data = {"videoID": unwatched_video.id }
+    video_data = {"videoUrl": unwatched_video.videoUrl }
 
     response = test_client.post("/videos/", headers=valid_user_request_headers, data=json.dumps(video_data))
 

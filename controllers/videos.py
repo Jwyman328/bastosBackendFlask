@@ -20,7 +20,7 @@ def get_all_videos():
 def mark_video_as_watched():
     current_user = get_current_user_by_jwt()
     user_id = current_user.id
-    video_id = request.json['videoID']
+    video_id = request.json['videoUrl']
 
     watched_video = VideoDal.mark_video_as_watched(user_id, video_id)
 
