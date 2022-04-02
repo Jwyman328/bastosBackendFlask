@@ -28,7 +28,7 @@ class Video(db.Model, Base):
     def get_json_categories_without_book_backref(self):
         json_categories = []
         for category_item in self.categories:
-            json_categories.append({"category": category_item.category})
+            json_categories.append( category_item.category)
         return json_categories
 
     def get_video_and_related_categories_as_jsonable(self):

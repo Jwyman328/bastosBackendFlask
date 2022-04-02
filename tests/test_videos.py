@@ -19,6 +19,6 @@ def test_get_video_and_related_categories_as_jsonable(test_client):
     horror_category = Category(category = category_horror_fixture)
     first_video.categories.append(horror_category)
 
-    # as dictionary with dictionary category
-    video_fixture["categories"] = [{"category": category_horror_fixture}]
+    # as array of categories
+    video_fixture["categories"] = [category_horror_fixture]
     assert first_video.get_video_and_related_categories_as_jsonable() == video_fixture

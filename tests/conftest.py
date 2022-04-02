@@ -204,7 +204,7 @@ def populate_db_with_videos_and_notes(init_db, populate_db_with_videos_and_categ
     db = init_db
     videos = populate_db_with_videos_and_categories["videos"]
 
-    new_note_for_video_1 = Note(note_text=note_fixture_one["noteText"], note_title=note_fixture_one["noteTitle"], video_time_note_taken_in_seconds=note_fixture_one["videoTimeNoteTakenInSeconds"])
+    new_note_for_video_1 = Note(noteText=note_fixture_one["noteText"], noteTitle=note_fixture_one["noteTitle"], videoTimeNoteTakenInSeconds=note_fixture_one["videoTimeNoteTakenInSeconds"])
     videos[0].notes.append(new_note_for_video_1)
     db.session.commit()
 
@@ -216,7 +216,7 @@ def populate_db_with_videos_and_notes(init_db, populate_db_with_videos_and_categ
 
 
     request.addfinalizer(teardown)
-    return {"video_with_notes": videos[0], "video_without_notes": videos[1], "note_data": note_fixture_one, "video_id":videos[0].id, "note_id": new_note_for_video_1.id  }
+    return {"video_with_notes": videos[0], "video_without_notes": videos[1], "note_data": note_fixture_one, "video_id":videos[0].id, "note_id": new_note_for_video_1.id, "video_url":videos[0].videoUrl  }
 
 
 @pytest.fixture(scope="function")

@@ -7,19 +7,17 @@ from dal.Notes_Dal import NotesDal
 
 notes_controller = Blueprint("notes", __name__)
 
-@notes_controller.route("/notes")
+@notes_controller.route("/notes/<video_id>")
 @jwt_required()
-def get_all_notes():
+def get_all_notes(video_id):
     ## eventuall add if it has been watched
     current_user = get_current_user_by_jwt()
     user_id = current_user.id
-    # all_videos = VideoDal.get_all_videos(user_id)
-    video_id = request.args.get("videoId")
     all_notes = NotesDal.get_all_notes_for_video(video_id)
     return jsonify(all_notes)
 
 
-@notes_controller.route("/notes", methods=["POST"])
+@notes_controller.route("/notes/", methods=["POST"])
 @jwt_required()
 def create_note():
     current_user = get_current_user_by_jwt()
@@ -34,24 +32,22 @@ def create_note():
 
     return Response( status=201, mimetype='application/json')
 
-@notes_controller.route("/notes", methods=["DELETE"])
+@notes_controller.route("/notes/<note_id>", methods=["DELETE"])
 @jwt_required()
-def delete_note():
+def delete_note(note_id):
     # maybe make it so only the owner of the note can delete it.
-    note_id = request.args.get("noteId")
     NotesDal.delete_note(note_id)
 
     return Response( status=200, mimetype='application/json')
 
-@notes_controller.route("/notes", methods=["PUT"])
+@notes_controller.route("/notes/<note_id>", methods=["PUT"])
 @jwt_required()
-def update_note():
+def update_note(note_id):
     # maybe make it so only the owner of the note can delete it.
-    note_id = request.args.get("noteId")
-    note_title = request.json['noteTitle']
-    note_text = request.json['noteText']
+    noteTitle = request.json['noteTitle']
+    noteText = request.json['noteText']
 
-    NotesDal.update_note(note_id, note_title, note_text)
+    NotesDal.update_note(note_id, noteTitle, noteText)
 
     return Response( status=204, mimetype='application/json')
 

@@ -9,7 +9,7 @@ def test_get_all_videos(test_client, populate_db_with_videos_and_categories, pop
     valid_user = populate_db_with_valid_user
     valid_user_request_headers = create_authentication_header(valid_user.session_token)
 
-    response = test_client.get("/videos", headers=valid_user_request_headers)
+    response = test_client.get("/videos/", headers=valid_user_request_headers)
     response_data_as_python_dict = json.loads(response.get_data(as_text=True))
 
     jsonable_video_data_1 = populated_video_1.get_video_and_related_categories_as_jsonable()
@@ -26,7 +26,7 @@ def test_get_all_videos_marked_as_watched_or_not(test_client, valid_user_has_wat
     valid_user = valid_user_has_watched_first_video["user"]
     valid_user_request_headers = create_authentication_header(valid_user.session_token)
 
-    response = test_client.get("/videos", headers=valid_user_request_headers)
+    response = test_client.get("/videos/", headers=valid_user_request_headers)
 
     response_data_as_python_dict = json.loads(response.get_data(as_text=True))
 
@@ -49,12 +49,12 @@ def test_mark_video_as_watched(test_client, valid_user_has_watched_first_video):
     valid_user_request_headers = create_authentication_header(valid_user.session_token)
     video_data = {"videoID": unwatched_video.id }
 
-    response = test_client.post("/videos", headers=valid_user_request_headers, data=json.dumps(video_data))
+    response = test_client.post("/videos/", headers=valid_user_request_headers, data=json.dumps(video_data))
 
     assert response.status == "201 CREATED"
 
     # get videos and now they all should be marked as watched 
-    response = test_client.get("/videos", headers=valid_user_request_headers)
+    response = test_client.get("/videos/", headers=valid_user_request_headers)
 
     response_data_as_python_dict = json.loads(response.get_data(as_text=True))
     assert len(response_data_as_python_dict) == 2

@@ -6,7 +6,7 @@ from controllers.helpers.auth_helpers import get_current_user_by_jwt
 
 videos_controller = Blueprint("videos", __name__)
 
-@videos_controller.route("/videos")
+@videos_controller.route("/videos/")
 @jwt_required()
 def get_all_videos():
     ## eventuall add if it has been watched
@@ -15,7 +15,7 @@ def get_all_videos():
     all_videos = VideoDal.get_all_videos(user_id)
     return jsonify(all_videos)
 
-@videos_controller.route("/videos", methods=["POST"])
+@videos_controller.route("/videos/", methods=["POST"])
 @jwt_required()
 def mark_video_as_watched():
     current_user = get_current_user_by_jwt()
