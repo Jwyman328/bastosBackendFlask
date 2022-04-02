@@ -12,7 +12,6 @@ notes_controller = Blueprint("notes", __name__)
 def get_all_notes(video_id):
     ## eventuall add if it has been watched
     current_user = get_current_user_by_jwt()
-    user_id = current_user.id
     all_notes = NotesDal.get_all_notes_for_video(video_id)
     return jsonify(all_notes)
 

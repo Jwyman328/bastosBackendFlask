@@ -89,10 +89,10 @@ def populate_db_with_articles_and_categories(test_client, init_db, request):
     history = Category(category=category_history_fixture)
 
     article_1 = Article(url=article_1_fixture["url"], imageUrl=article_1_fixture["imageUrl"],
-                        title=article_1_fixture["title"])
+                        title=article_1_fixture["title"], date= article_1_fixture["date"])
 
     article_2 = Article(url=article_2_fixture["url"], imageUrl=article_2_fixture["imageUrl"],
-                        title=article_2_fixture["title"])
+                        title=article_2_fixture["title"], date = article_2_fixture["date"])
     db.session.add_all([article_2, article_1, horror, history,  economics])
     db.session.commit()
     article_1.categories.extend([horror, economics])

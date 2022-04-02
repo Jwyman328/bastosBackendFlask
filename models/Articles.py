@@ -14,14 +14,15 @@ class Article(db.Model, Base):
     url = db.Column(db.String)
     imageUrl = db.Column(db.String)
     title = db.Column(db.String)
-    date = db.Column(db.Date)
+    date = db.Column(db.String)
     categories = db.relationship(
         "Category", secondary=article_category, backref="article", lazy=True)
 
-    def __init__(self, url, imageUrl, title):
+    def __init__(self, url, imageUrl, title, date):
         self.url = url
         self.imageUrl = imageUrl
         self.title = title
+        self.date = date
 
     # author: db.Column(db.String, ForeignKey("authord"))
 

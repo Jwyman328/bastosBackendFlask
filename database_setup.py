@@ -26,10 +26,10 @@ def seed_db():
     allType = Category(category="allType")
     allInstitute = Category(category="allInstitute") 
     article_1 = Article(url="www.myurl.com", imageUrl="www.myimageurl.com",
-                        title="the best article")
+                        title="the best article", date="2014-02-10")
 
     article_2 = Article(url="www.myurl.com", imageUrl="www.myimageurl.com",
-                        title="the best article", )
+                        title="the best article",date="2014-02-11" )
 
     fundamentos_de_la_libertad_instance = Book(**fundamentos_de_la_libertad)
     fundamentos_de_la_libertad_instance.catagories.append(economics)
